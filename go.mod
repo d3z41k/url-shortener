@@ -21,4 +21,6 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/dealancer/validate.v2 v2.1.0
+	gorm.io/driver/mysql v1.0.4 // indirect
+	gorm.io/gorm v1.20.12 // indirect
 )

@@ -3,7 +3,8 @@ package main
 import (
 	"fmt"
 	h "github.com/d3z41k/url-shortener/api"
-	mr "github.com/d3z41k/url-shortener/repository/mongo"
+	mor "github.com/d3z41k/url-shortener/repository/mongo"
+	myr "github.com/d3z41k/url-shortener/repository/mysql"
 	rr "github.com/d3z41k/url-shortener/repository/redis"
 	"github.com/d3z41k/url-shortener/shortener"
 	"github.com/go-chi/chi"
@@ -16,14 +17,26 @@ import (
 	"syscall"
 )
 
+// https://www.google.com -> 98sj1-293
+// http://localhost:8000/98sj1-293 -> https://www.google.com
+
+// repo <- service -> serializer  -> http
+
 func main() {
 	//os.Setenv("URL_DB", "redis")
 	//os.Setenv("REDIS_URL", "redis://localhost:6379")
 
-	os.Setenv("URL_DB", "mongo")
-	os.Setenv("MONGO_URL", "mongodb://localhost/shortener")
-	os.Setenv("MONGO_TIMEOUT", "30")
-	os.Setenv("MONGO_DB", "shortener")
+	//os.Setenv("URL_DB", "mongo")
+	//os.Setenv("MONGO_URL", "mongodb://localhost/shortener")
+	//os.Setenv("MONGO_TIMEOUT", "30")
+	//os.Setenv("MONGO_DB", "shortener")
+
+	os.Setenv("URL_DB", "mysql")
+	os.Setenv("DB_USER", "root")
+	os.Setenv("DB_PASSWORD", "password")
+	os.Setenv("DB_HOST", "127.0.0.1")
+	os.Setenv("DB_PORT", "3306")
+	os.Setenv("DB_NAME", "shortener")
 
 	repo := chooseRepo()
 	service := shortener.NewRedirectService(repo)
@@ -74,7 +87,20 @@ func chooseRepo() shortener.RedirectRepository {
 		mongoURL := os.Getenv("MONGO_URL")
 		mongodb := os.Getenv("MONGO_DB")
 		mongoTimeout, _ := strconv.Atoi(os.Getenv("MONGO_TIMEOUT"))
-		repo, err := mr.NewMongoRepository(mongoURL, mongodb, mongoTimeout)
+		repo, err := mor.NewMongoRepository(mongoURL, mongodb, mongoTimeout)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return repo
+	case "mysql":
+		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?&charset=utf8&interpolateParams=true",
+			os.Getenv("DB_USER"),
+			os.Getenv("DB_PASSWORD"),
+			os.Getenv("DB_HOST"),
+			os.Getenv("DB_PORT"),
+			os.Getenv("DB_NAME"))
+
+		repo, err := myr.NewMysqlRepository(dsn)
 		if err != nil {
 			log.Fatal(err)
 		}
