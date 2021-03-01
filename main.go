@@ -9,6 +9,7 @@ import (
 	"github.com/d3z41k/url-shortener/shortener"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/joho/godotenv"
 	"log"
 	"net/http"
 	"os"
@@ -23,20 +24,9 @@ import (
 // repo <- service -> serializer  -> http
 
 func main() {
-	//os.Setenv("URL_DB", "redis")
-	//os.Setenv("REDIS_URL", "redis://localhost:6379")
-
-	//os.Setenv("URL_DB", "mongo")
-	//os.Setenv("MONGO_URL", "mongodb://localhost/shortener")
-	//os.Setenv("MONGO_TIMEOUT", "30")
-	//os.Setenv("MONGO_DB", "shortener")
-
-	os.Setenv("URL_DB", "mysql")
-	os.Setenv("DB_USER", "root")
-	os.Setenv("DB_PASSWORD", "password")
-	os.Setenv("DB_HOST", "127.0.0.1")
-	os.Setenv("DB_PORT", "3306")
-	os.Setenv("DB_NAME", "shortener")
+	if err := godotenv.Load(); err != nil {
+		log.Fatal(err)
+	}
 
 	repo := chooseRepo()
 	service := shortener.NewRedirectService(repo)
