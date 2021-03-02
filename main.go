@@ -6,6 +6,7 @@ import (
 	mor "github.com/d3z41k/url-shortener/repository/mongo"
 	myr "github.com/d3z41k/url-shortener/repository/mysql"
 	rr "github.com/d3z41k/url-shortener/repository/redis"
+	slr "github.com/d3z41k/url-shortener/repository/sqlite"
 	"github.com/d3z41k/url-shortener/shortener"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -84,13 +85,19 @@ func chooseRepo() shortener.RedirectRepository {
 		return repo
 	case "mysql":
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?&charset=utf8&interpolateParams=true",
-			os.Getenv("DB_USER"),
-			os.Getenv("DB_PASSWORD"),
-			os.Getenv("DB_HOST"),
-			os.Getenv("DB_PORT"),
-			os.Getenv("DB_NAME"))
+			os.Getenv("MYSQL_USER"),
+			os.Getenv("MYSQL_PASSWORD"),
+			os.Getenv("MYSQL_HOST"),
+			os.Getenv("MYSQL_PORT"),
+			os.Getenv("MYSQL_NAME"))
 
 		repo, err := myr.NewMysqlRepository(dsn)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return repo
+	case "sqlite":
+		repo, err := slr.NewSqliteRepository(os.Getenv("SQLITE_DB"))
 		if err != nil {
 			log.Fatal(err)
 		}

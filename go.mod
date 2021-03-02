@@ -10,6 +10,7 @@ require (
 	github.com/golang/snappy v0.0.2 // indirect
 	github.com/klauspost/compress v1.11.2 // indirect
 	github.com/leodido/go-urn v1.2.0 // indirect
+	github.com/mattn/go-sqlite3 v1.14.6 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/teris-io/shortid v0.0.0-20171029131806-771a37caa5cf
 	github.com/vmihailenco/msgpack v4.0.4+incompatible
@@ -22,5 +23,6 @@ require (
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/dealancer/validate.v2 v2.1.0
 	gorm.io/driver/mysql v1.0.4 // indirect
+	gorm.io/driver/sqlite v1.1.4 // indirect
 	gorm.io/gorm v1.20.12 // indirect
 )
