@@ -10,6 +10,7 @@ require (
 	github.com/joho/godotenv v1.3.0
 	github.com/klauspost/compress v1.12.3 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/matoous/go-nanoid/v2 v2.0.0 // indirect
 	github.com/mattn/go-sqlite3 v1.14.7 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125

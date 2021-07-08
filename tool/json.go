@@ -22,7 +22,7 @@ func httpPort() string {
 func main() {
 	address := fmt.Sprintf("http://localhost%s", httpPort())
 	redirect := shortener.Redirect{}
-	redirect.URL = "https://github.com/d3z41k/big-db-project"
+	redirect.URL = "https://github.com/ai/nanoid/"
 
 	body, err := json.Marshal(&redirect)
 	if err != nil {

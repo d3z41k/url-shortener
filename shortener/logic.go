@@ -2,8 +2,8 @@ package shortener
 
 import (
 	"errors"
+	gonanoid "github.com/matoous/go-nanoid/v2"
 	errs "github.com/pkg/errors"
-	"github.com/teris-io/shortid"
 	"gopkg.in/dealancer/validate.v2"
 	"time"
 )
@@ -31,7 +31,12 @@ func (r *redirectService) Store(redirect *Redirect) error {
 	if err := validate.Validate(redirect); err != nil {
 		return errs.Wrap(ErrRedirectInvalid, "service.Redirect.Store")
 	}
-	redirect.Code = shortid.MustGenerate()
+	code, err := gonanoid.New()
+	if err != nil {
+		return errs.Wrap(ErrRedirectInvalid, "service.Redirect.Store.code")
+	}
+	redirect.Code = code
+
 	redirect.CreatedAt = time.Now().UTC().Unix()
 	return r.redirectRepo.Store(redirect)
 }
