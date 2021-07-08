@@ -34,10 +34,14 @@ func setupResponse(w http.ResponseWriter, contentType string, body []byte, statu
 }
 
 func (h *handler) serializer(contentType string) shortener.RedirectSerializer {
-	if contentType == "application/x-msgpack" {
+	switch contentType {
+	case "application/x-msgpack":
 		return &ms.Redirect{}
+	case "application/json":
+		return &js.Redirect{}
+	default:
+		return &js.Redirect{}
 	}
-	return &js.Redirect{}
 }
 
 func (h *handler) Get(w http.ResponseWriter, r *http.Request) {

@@ -2,33 +2,34 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/d3z41k/url-shortener/shortener"
-	"github.com/vmihailenco/msgpack"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 )
 
-//func httpPort() string {
-//	port := "8000"
-//	if os.Getenv("PORT") != "" {
-//		port = os.Getenv("PORT")
-//	}
-//	return fmt.Sprintf(":%s", port)
-//}
+func httpPort() string {
+	port := "8000"
+	if os.Getenv("PORT") != "" {
+		port = os.Getenv("PORT")
+	}
+	return fmt.Sprintf(":%s", port)
+}
 
 func main() {
 	address := fmt.Sprintf("http://localhost%s", httpPort())
 	redirect := shortener.Redirect{}
-	redirect.URL = "https://github.com/d3z41k?tab=repositories"
+	redirect.URL = "https://github.com/d3z41k/big-db-project"
 
-	body, err := msgpack.Marshal(&redirect)
+	body, err := json.Marshal(&redirect)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	resp, err := http.Post(address, "application/x-msgpack", bytes.NewBuffer(body))
+	resp, err := http.Post(address, "application/json", bytes.NewBuffer(body))
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -39,7 +40,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	msgpack.Unmarshal(body, &redirect)
+	json.Unmarshal(body, &redirect)
 
 	log.Printf("%v\n", redirect)
 }

@@ -83,6 +83,12 @@ func chooseRepo() shortener.RedirectRepository {
 			log.Fatal(err)
 		}
 		return repo
+	case "sqlite":
+		repo, err := slr.NewSqliteRepository(os.Getenv("SQLITE_DB"))
+		if err != nil {
+			log.Fatal(err)
+		}
+		return repo
 	case "mysql":
 		dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?&charset=utf8&interpolateParams=true",
 			os.Getenv("MYSQL_USER"),
@@ -92,12 +98,6 @@ func chooseRepo() shortener.RedirectRepository {
 			os.Getenv("MYSQL_NAME"))
 
 		repo, err := myr.NewMysqlRepository(dsn)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return repo
-	case "sqlite":
-		repo, err := slr.NewSqliteRepository(os.Getenv("SQLITE_DB"))
 		if err != nil {
 			log.Fatal(err)
 		}
